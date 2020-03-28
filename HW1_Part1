@@ -1,0 +1,39 @@
+#Part 1 - (a)
+def palindrome?(string)
+
+  string.downcase!
+  #string.strip!
+
+  string.gsub!(/ /, "")
+  string.gsub!(/,/, "")
+  string.gsub!(/[!@%&-="]/,'')
+  string.gsub!(/[ãáàâ]/, "a")
+  string.gsub!(/[éèê]/,"e")
+  string.gsub!(/[íì]/,"i")
+  string.gsub!(/[óòôõ]/,"o")
+  string.gsub!(/[úùû]/,"u")
+
+  if string == string.reverse
+    puts true
+  else
+    puts false
+  end
+end
+
+palindrome?("A man, a plan, a canal -- Panama")
+palindrome?("Madam, I'm Adam!")
+palindrome?("Abracadabra")
+
+#Part I (b)
+def count_words(string)
+
+  string.downcase!
+  count = Hash.new(0)
+  string.scan(/\w+/) do |w|
+    count[w] += 1
+  end
+  puts count
+end
+
+count_words("A man, a plan, a canal -- Panama")
+count_words "Doo bee doo bee doo"
