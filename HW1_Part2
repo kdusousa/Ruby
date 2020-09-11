@@ -1,0 +1,93 @@
+require 'enumerator'
+
+#Part2 (a)
+class WrongNumberOfPlayersError < StandardError ; end
+class NoSuchStrategyError < StandardError ; end
+def rps_game_winner(game)
+  raise WrongNumberOfPlayersError unless game.length == 2
+  player_1 = game[0]
+  player_2 = game[1]
+  #rule = [[["R", "S"], "R"],[["R", "P"], "P"], [["P", "S"], "S"]]
+
+  game.each do |player, strategy|
+    raise NoSuchStrategyError unless strategy == "R" || strategy =="P" ||strategy == "S"
+      #puts "A estratégia do jogador #{player} é #{strategy}"
+
+  end
+  if player_1[1] == "R"
+    if player_2[1] == "S" ||  player_2[1] == "R"
+
+      return["#{player_1[0]}", "#{player_1[1]}"]
+    else if player_2[1] == "P"
+           return["#{player_2[0]}", "#{player_2[1]}"]
+           #puts "#{player_2[0]} vence com a estratégia #{player_2[1]}"
+         end
+    end
+  end
+
+  if player_1[1] == "P"
+    if player_2[1] == "R" ||  player_2[1] == "P"
+      return["#{player_1[0]}", "#{player_1[1]}"]
+      #puts "#{player_1[0]} vence com a estratégia #{player_1[1]}"
+      else if player_2[1] == "S"
+             return["#{player_2[0]}", "#{player_2[1]}"]
+             #puts "#{player_2[0]} vence com a estratégia #{player_2[1]}"
+           end
+      end
+  end
+
+  if player_1[1] == "S"
+    if player_2[1] == "S" ||  player_2[1] == "P"
+      return["#{player_1[0]}", "#{player_1[1]}"]
+      #puts "#{player_1[0]} vence com a estratégia #{player_1[1]}"
+    else if player_2[1] == "R"
+           return["#{player_2[0]}", "#{player_2[1]}"]
+           #puts "#{player_2[0]} vence com a estratégia #{player_2[1]}"
+         end
+    end
+  end
+
+end
+#game = [["Kristen","R"], ["Pam", "R"]]
+#rps_game_winner(game)
+
+#(b)
+def rps_tournament_winner(tournament)
+  @semifinal = []
+  @final = []
+  for i in 0..tournament.length-1
+    #puts "match #{i}"
+    match = tournament[i]
+    #puts match
+      for j in 0..match.length-1
+        #puts "game #{j}"
+        game = match[j]
+        #puts game
+        @semifinal[j] = rps_game_winner(game)
+        #puts "semifinalista #{j}"
+        #puts @semifinal[j]
+
+      end
+    @final[i] = rps_game_winner(@semifinal)
+    #puts "finalista #{i}"
+    #puts @final[i]
+  end
+  winner = rps_game_winner(@final)
+  #puts "Campeão"
+  return winner
+  end
+
+
+tournament = [
+    [
+        [ ["Kristen", "P"], ["Dave", "S"] ],
+        [ ["Richard", "R"], ["Michael", "S"] ],
+    ],
+    [
+        [ ["Allen", "S"], ["Omer", "P"] ],
+        [ ["David E.", "R"], ["Richard X.", "P"] ]
+    ]
+]
+
+winner = rps_tournament_winner(tournament)
+puts "O campeão foi #{winner[0]} com a estratégia #{winner[1]}"
